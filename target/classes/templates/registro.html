@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+<body>
+<th:block th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+    <title>Registro - GameVault</title>
+    <main class="container">
+        <div class="panel" style="max-width: 450px; margin: 0 auto;">
+            <h2 class="text-gradient" style="margin-top: 0;">Crear cuenta</h2>
+
+            <p th:if="${error}" th:text="${error}" style="color: #ff6b6b;"></p>
+
+            <form th:action="@{/registro}" method="post">
+                <div class="form-group">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="email" class="form-label">Correo</label>
+                    <input type="email" id="email" name="email" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="contrasena" class="form-label">Contraseña</label>
+                    <input type="password" id="contrasena" name="contrasena" required minlength="6" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Registrarme</button>
+            </form>
+            <p style="margin-bottom: 0;">¿Ya tienes cuenta? <a th:href="@{/login}">Inicia sesión</a></p>
+        </div>
+    </main>
+</th:block>
+</body>
+</html>

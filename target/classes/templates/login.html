@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<th:block th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+    <title>Iniciar sesión - GameVault</title>
+    <main class="container">
+        <div class="panel" style="max-width: 450px; margin: 0 auto;">
+            <h2 class="text-gradient" style="margin-top: 0;">Iniciar sesión</h2>
+
+            <p th:if="${param.error}" style="color: #ff6b6b;">Correo o contraseña incorrectos.</p>
+            <p th:if="${param.registrado}" style="color: var(--primary);">Cuenta creada. Ya puedes iniciar sesión.</p>
+
+            <form th:action="@{/login}" method="post">
+                <div class="form-group">
+                    <label for="email" class="form-label">Correo</label>
+                    <input type="email" id="email" name="email" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" id="password" name="password" required class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
+            </form>
+            <p style="margin-bottom: 0;">¿No tienes cuenta? <a th:href="@{/registro}">Regístrate</a></p>
+        </div>
+    </main>
+</th:block>
+</body>
+</html>

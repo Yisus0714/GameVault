@@ -1,20 +1,18 @@
-package com.example.GameVault.services;
+package com.example.GameVault.service;
 
 import com.example.GameVault.model.Usuario;
 import com.example.GameVault.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+/**
+ * Lógica de usuarios: registro y autenticación.
+ */
 @Service
-public class UsuarioService implements UserDetailsService {
+public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -22,33 +20,27 @@ public class UsuarioService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Usuario u = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("No existe: " + email));
-        return User.withUsername(u.getEmail())
-                .password(u.getContrasena())
-                .roles("USER")
-                .build();
+    /**
+     * Registra un usuario guardando su contraseña cifrada con BCrypt.
+     */
+    public Usuario registrarUsuario(Usuario usuario) {
+        usuario.setContrasenia(passwordEncoder.encode(usuario.getContrasenia()));
+        return usuarioRepository.save(usuario);
     }
 
-    public boolean existePorEmail(String email) {
-        return usuarioRepository.existsByEmail(email);
-    }
+    /**
+     * Devuelve el usuario si el correo existe y la contraseña coincide; si no, null.
+     */
+    public Usuario autenticarUsuario(String email, String password) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
-    public Usuario registrar(String nombre, String email, String contrasena) {
-        Usuario u = new Usuario();
-        u.setNombre(nombre);
-        u.setEmail(email);
-        u.setContrasena(passwordEncoder.encode(contrasena));
-        return usuarioRepository.save(u);
-    }
-
-    public Usuario obtenerUsuarioLogueado() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) {
-            return null;
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            // matches() cifra la contraseña escrita y la compara con el hash guardado
+            if (passwordEncoder.matches(password, usuario.getContrasenia())) {
+                return usuario;
+            }
         }
-        return usuarioRepository.findByEmail(auth.getName()).orElse(null);
+        return null;
     }
 }

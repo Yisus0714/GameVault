@@ -1,7 +1,8 @@
-package com.example.GameVault.service;
+package com.example.GameVault.services;
 
 import com.example.GameVault.model.Usuario;
 import com.example.GameVault.repository.UsuarioRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class UsuarioService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private HttpSession session;
 
     /**
      * Registra un usuario guardando su contraseña cifrada con BCrypt.
@@ -43,4 +47,16 @@ public class UsuarioService {
         }
         return null;
     }
+
+    public Usuario obtenerUsuarioLogueado() {
+        Long id = (Long) session.getAttribute("usuario_id");
+        if (id != null) {
+            Optional<Usuario> usuarioDet = this.usuarioRepository.findById(id);
+            if (usuarioDet.isPresent()) {
+                return usuarioDet.get();
+            }
+        }
+        return null;
+    }
+
 }

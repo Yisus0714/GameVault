@@ -11,8 +11,9 @@
     <a th:href="@{/juegos}" class="nav-brand">🎮 GameVault</a>
     <div class="nav-links">
         <a th:href="@{/juegos}">Catálogo</a>
+        <a th:href="@{/fragments-demo}" style="color: var(--success); margin-left:20px;">[Teoría]</a>
 
-        <th:block th:if="${usuarioActual != null}">
+        <th:block th:if="${session_usuario_id != null}">
             <a th:href="@{/mis-juegos}">Mis Juegos</a>
             <a th:href="@{/juegos/nuevo}">Subir Juego</a>
             <form th:action="@{/logout}" method="post" style="display: inline; margin: 0;">
@@ -20,12 +21,11 @@
             </form>
         </th:block>
 
-        <th:block th:if="${usuarioActual == null}">
+        <th:block th:if="${session_usuario_id == null}">
             <a th:href="@{/login}">Iniciar sesión</a>
             <a th:href="@{/registro}">Registrarse</a>
         </th:block>
 
-        <a th:href="@{/fragments-demo}" style="color: var(--success); margin-left:20px;">[Teoría]</a>
     </div>
 </nav>
 

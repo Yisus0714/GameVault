@@ -22,12 +22,7 @@ public class GameController {
     @Autowired
     private UsuarioService usuarioService;
 
-    private boolean esDuenio(Juego juego, Usuario usuario) {
-        return juego != null
-                && usuario != null
-                && juego.getUsuario() != null
-                && juego.getUsuario().getId().equals(usuario.getId());
-    }
+
 
     @GetMapping("/fragments-demo")
     public String fragments() {
@@ -66,7 +61,6 @@ public class GameController {
         juego.setDescripcion(descripcion);
         juego.setPrecio(precio);
         juego.setCategoria(categoria);
-        juego.setUsuario(usuarioService.obtenerUsuarioLogueado());
 
         juegoService.guardarJuego(juego, portada);
         return "redirect:/mis-juegos";
@@ -77,10 +71,6 @@ public class GameController {
         Juego juego = juegoService.obtenerJuegoPorId(id);
         Usuario logueado = usuarioService.obtenerUsuarioLogueado();
 
-        if (esDuenio(juego, logueado)) {
-            model.addAttribute("juego", juego);
-            return "formulario";
-        }
         return "redirect:/mis-juegos";
     }
 
@@ -94,13 +84,7 @@ public class GameController {
         Juego juegoExistente = juegoService.obtenerJuegoPorId(id);
         Usuario logueado = usuarioService.obtenerUsuarioLogueado();
 
-        if (esDuenio(juegoExistente, logueado)) {
-            juegoExistente.setTitulo(titulo);
-            juegoExistente.setDescripcion(descripcion);
-            juegoExistente.setPrecio(precio);
-            juegoExistente.setCategoria(categoria);
-            juegoService.guardarJuego(juegoExistente, portada);
-        }
+
         return "redirect:/mis-juegos";
     }
 
@@ -109,9 +93,6 @@ public class GameController {
         Juego juego = juegoService.obtenerJuegoPorId(id);
         Usuario logueado = usuarioService.obtenerUsuarioLogueado();
 
-        if (esDuenio(juego, logueado)) {
-            juegoService.eliminarJuego(id);
-        }
         return "redirect:/mis-juegos";
     }
 }

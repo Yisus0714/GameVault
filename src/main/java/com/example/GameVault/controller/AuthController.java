@@ -1,7 +1,8 @@
 package com.example.GameVault.controller;
 
 import com.example.GameVault.model.Usuario;
-import com.example.GameVault.service.UsuarioService;
+import com.example.GameVault.services.UsuarioService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +18,8 @@ public class AuthController {
 
     @Autowired
     private UsuarioService usuarioService;
-
+    @Autowired
+    private HttpSession session;
     @GetMapping("/login")
     public String mostrarLogin() {
         return "login";
@@ -31,10 +33,10 @@ public class AuthController {
         Usuario usuario = usuarioService.autenticarUsuario(email, password);
 
         if (usuario != null) {
-            // Las credenciales son correctas, pero todavía no recordamos quién es:
-            // en cuanto cambie de página, la aplicación lo olvida.
+
             model.addAttribute("mensaje", "Bienvenido, " + usuario.getNombre());
-            return "login";
+            session.setAttribute("usuario_id",usuario.getId());
+            return "redirect:/mis-juegos";
         } else {
             model.addAttribute("error", "Credenciales inválidas. Inténtalo de nuevo.");
             return "login";
@@ -43,7 +45,6 @@ public class AuthController {
 
     @GetMapping("/registro")
     public String mostrarRegistro(Model model) {
-        // Objeto vacío que el formulario llena con th:field
         model.addAttribute("usuario", new Usuario());
         return "registro";
     }

@@ -1,8 +1,8 @@
 package com.example.GameVault.controller;
 
 import com.example.GameVault.model.Usuario;
-import com.example.GameVault.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.example.GameVault.services.UsuarioService;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 

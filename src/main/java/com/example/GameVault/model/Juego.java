@@ -6,9 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data //Generar gets y sets
-@NoArgsConstructor  //Constructor sin argumentos
-@AllArgsConstructor  //Constructor con todito
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 
 //Entidad
 @Entity
@@ -33,8 +35,7 @@ public class Juego {
     @Column
     private Double precio;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+    @OneToMany(mappedBy = "usuario",cascade = CascadeType.ALL)
+    private List<Juego> juegos;
 
 }

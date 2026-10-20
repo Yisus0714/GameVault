@@ -10,28 +10,24 @@
 <nav>
     <a th:href="@{/juegos}" class="nav-brand">🎮 GameVault</a>
     <div class="nav-links">
-        <a th:href="@{/juegos}">Catálogo</a>
-        <a th:href="@{/fragments-demo}" style="color: var(--success); margin-left:20px;">[Teoría]</a>
+        <a href="/juegos">Inicio (Catálogo)</a>
 
-        <th:block th:if="${session_usuario_id != null}">
-            <a th:href="@{/mis-juegos}">Mis Juegos</a>
-            <a th:href="@{/juegos/nuevo}">Subir Juego</a>
-            <form th:action="@{/logout}" method="post" style="display: inline; margin: 0;">
-                <button type="submit" class="btn btn-secondary">Salir</button>
-            </form>
+        <th:block th:if="${session.usuario_id == null}">
+            <a href="/login" style="margin-left:20px;">Iniciar Sesión</a>
+            <a href="/registro">Registrarse</a>
         </th:block>
 
-        <th:block th:if="${session_usuario_id == null}">
-            <a th:href="@{/login}">Iniciar sesión</a>
-            <a th:href="@{/registro}">Registrarse</a>
+        <th:block th:if="${session.usuario_id != null}">
+            <a href="/mis-juegos" style="color: var(--primary); margin-left:20px;">Mis Videojuegos</a>
+            <a href="/juegos/nuevo">Subir Juego</a>
+            <a href="/logout" style="color: var(--danger); margin-left:20px;">Cerrar Sesión</a>
         </th:block>
-
     </div>
 </nav>
 
-    <main class="container" th:replace="${content}">
-        
-    </main>
+<main class="container" th:replace="${content}">
+
+</main>
 
 </body>
 </html>

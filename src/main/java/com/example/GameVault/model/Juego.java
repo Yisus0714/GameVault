@@ -1,16 +1,13 @@
 package com.example.GameVault.model;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Data //Generar gets y sets
+@NoArgsConstructor  //Constructor sin argumentos
+@AllArgsConstructor  //Constructor con todito
 
 //Entidad
 @Entity
@@ -35,7 +32,7 @@ public class Juego {
     @Column
     private Double precio;
 
-    @OneToMany(mappedBy = "usuario",cascade = CascadeType.ALL)
-    private List<Juego> juegos;
-
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 }
